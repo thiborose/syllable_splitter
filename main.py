@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Nov 17 16:43:05 2019
 
-@author: thibo
-"""
+"""Phonetics project NLP M1: syllabification by Eduardo Calò and Thibo Rosemplatt"""
 
-import pdb
+from collections import Counter
 
 consonants = {'p', 't', 'k', 'b', 'd', 'g',
                'f', 's', 'c', 'v', 'z',
@@ -80,6 +77,7 @@ def rule2(string):
     return position
 
 def rule3(string):
+    breakpoint()
     position= int()
     if len(string)==3:
         if string[0] not in sampa_liquids and string[0] not in sampa_semi_vowels:
@@ -94,11 +92,11 @@ def rule3(string):
     if do_this_rule:
         #go back on this 
         position = 1
+    breakpoint()
     return position
 
 
 def syllabic_phonetics(sampa):
-    
     index_of_vowels = spot_vowels(sampa)
     
     slices = []
@@ -107,12 +105,8 @@ def syllabic_phonetics(sampa):
     index_of_hyphens_total = []
     
     for number in range(1,len(index_of_vowels)):     
-        #difference = index_of_vowels[number]-index_of_vowels[number-1]-1
         current_slice = sampa[index_of_vowels[number-1]+1:index_of_vowels[number]]
         slices.append(current_slice)
-        
-    #print(index_of_vowels)
-    #print(slices)
     #get the position of the hyphens for each slice 
     for sl in slices:
         index_of_hyphens_in_slices.append(rules(sl))
@@ -120,7 +114,6 @@ def syllabic_phonetics(sampa):
     for i in range(len(index_of_hyphens_in_slices)):
         total_index = index_of_hyphens_in_slices[i] + index_of_vowels[i]+1
         index_of_hyphens_total.append(total_index)
-    #print('indexes of the hyphens : {}'.format(index_of_hyphens_total))
     
     sampa = list(sampa)
     
@@ -134,7 +127,7 @@ def format_output(spelling, phonetic):
     
     
 def main():
-    pass
+    process_file()
 
 
 def process_file():
@@ -148,19 +141,20 @@ def process_file():
     with open('output_file.txt','w+') as output_file:
         print(final_output, file = output_file)
         
-def analyse_file():
-    pass
 
+def get_all_CV_forms(filename = "output_file.txt"):
+    with open('output_file.txt','r', encoding="utf-8-sig") as file:
+       lines = file.read().split("\n")
+       for i in range(len(lines)):
+           lines[i] = lines[i].split(" ")
+       cv_forms = [line[-1] for line in lines]
+       cv_forms = [cv_form.split("-") for cv_form in cv_forms]
+       cv_forms = [char for cv_form in cv_forms for char in cv_form]
+       return cv_forms
+
+def most_frequent(l):
+    occurence_count = Counter(l)
+    return occurence_count.most_common(15)
 
 if __name__ == '__main__':
     main()
-    
-                    
-            
-        
-
-
-
-
-
-
