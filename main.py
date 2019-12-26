@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""Phonetics project NLP M1: syllabification by Eduardo Calò and Thibo Rosemplatt"""
+"""
+Phonetics project NLP M1:
+syllabification by Eduardo Calò and Thibo Rosemplatt
+"""
 
 from collections import Counter
+import pandas
 
 consonants = {'p', 't', 'k', 'b', 'd', 'g',
                'f', 's', 'c', 'v', 'z',
@@ -77,7 +81,7 @@ def rule2(string):
     return position
 
 def rule3(string):
-    breakpoint()
+    #breakpoint()
     position= int()
     if len(string)==3:
         if string[0] not in sampa_liquids and string[0] not in sampa_semi_vowels:
@@ -92,7 +96,7 @@ def rule3(string):
     if do_this_rule:
         #go back on this 
         position = 1
-    breakpoint()
+    #breakpoint()
     return position
 
 
@@ -128,18 +132,25 @@ def format_output(spelling, phonetic):
     
 def main():
     process_file()
-
+    top15_all()
 
 def process_file():
     #please make sure the file is in the same folder as the program
     final_output = ''
-    with open('Input_File.txt','r') as input_file:
+    with open('Input_File.txt','r',encoding = 'utf-8-sig') as input_file:
+        print('input file read')
         lines = list(input_file) #split by lines
-        for line in lines:
-            line = line.replace('\n','')
-            final_output += format_output(line.split(' ')[0],line.split(' ')[1])+'\n'
+        for i in range(len(lines)):
+            #breakpoint()
+            lines[i] = lines[i].replace('\n','')
+            #breakpoint()
+            final_output += format_output(lines[i].split(' ')[0],lines[i].split(' ')[1])
+            if i != len(lines)-1:
+                final_output +='\n'
     with open('output_file.txt','w+') as output_file:
         print(final_output, file = output_file)
+        print('output file written')
+  
         
 
 def get_all_CV_forms(filename = "output_file.txt"):
@@ -147,14 +158,82 @@ def get_all_CV_forms(filename = "output_file.txt"):
        lines = file.read().split("\n")
        for i in range(len(lines)):
            lines[i] = lines[i].split(" ")
-       cv_forms = [line[-1] for line in lines]
+       cv_forms = [line[-1] for line in lines[:-1]]
        cv_forms = [cv_form.split("-") for cv_form in cv_forms]
        cv_forms = [char for cv_form in cv_forms for char in cv_form]
        return cv_forms
 
+def get_all_macroclass_forms(filename = "output_file.txt"):
+    
+    
+    macro_classes = {
+            'fV':'vzZ',
+            'fU':'fsS',
+            'stopV':'bdg',
+            'stopU':'ptk',
+            'n':'mnNG',
+            'l':'Rl',
+            'sv':'wj8',
+            'v':'aeiuoyE92O*@15'
+            }
+    
+    def get_macro_class(item):
+        for k,v in macro_classes.items():
+            if item in v:
+                return k 
+    
+    with open('output_file.txt','r', encoding="utf-8-sig") as file:
+       lines = file.read().split("\n")
+       for i in range(len(lines)):
+           lines[i] = lines[i].split(" ")
+       sampa_forms = [line[4] for line in lines[:-1]]
+       sampa_forms = [sampa_form.split("-") for sampa_form in sampa_forms]
+       sampa_forms = [char for sampa_form in sampa_forms for char in sampa_form]
+       
+       macro_forms = []
+       
+       for form in sampa_forms:
+           this_form = ''
+           try:
+               for char in form: 
+                   this_form += get_macro_class(char)
+               macro_forms.append(this_form)
+           except(TypeError):
+               #catching error when semicolon inside the sampa 
+               #(multiple pronunciation)
+               #print(char)
+               #print(form)
+               #breakpoint()
+               pass
+
+       return macro_forms
+
+def get_all_plain_syllables(filename = "output_file.txt"):
+    with open('output_file.txt','r', encoding="utf-8-sig") as file:
+       lines = file.read().split("\n")
+       for i in range(len(lines)):
+           lines[i] = lines[i].split(" ")
+       syllables = [line[4] for line in lines[:-1]]
+       syllables = [syllable.split("-") for syllable in syllables]
+       syllables = [el for syllable in syllables for el in syllable]
+       return syllables
+
 def most_frequent(l):
     occurence_count = Counter(l)
     return occurence_count.most_common(15)
+
+
+def top15_all():
+    with open('top15.txt', 'w', encoding="utf-8-sig") as file:
+        output = ''
+        for func in [get_all_CV_forms, get_all_macroclass_forms, get_all_plain_syllables]:
+            data = pandas.DataFrame(most_frequent(func()))
+            output += str(data)+'\n\n------------------\n\n'
+            print('Top 15 for {}'.format(func.__name__))
+            data.plot()
+            
+        print(output, file=file)
+    print('Top15 file created ')
 
 if __name__ == '__main__':
     main()
