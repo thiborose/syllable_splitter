@@ -174,12 +174,12 @@ def get_all_macroclass_forms(filename = "output_file.txt"):
     
     macro_classes = {
             'fV':'vzZ',
-            'fU':'fsS',
+            'fU':'fsSh',
             'stopV':'bdg',
             'stopU':'ptk',
             'n':'mnNG',
             'l':'Rl',
-            'sv':'wj8h',
+            'sv':'wj8',
             'v':'aeiuoyE92O*@15'
             }
     
