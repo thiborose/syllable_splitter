@@ -143,7 +143,13 @@ def process_file():
         for i in range(len(lines)):
             #breakpoint()
             lines[i] = lines[i].replace('\n','')
-            #breakpoint()
+            #Handling the double pronunciations
+            if ";" in lines[i]:
+                pronun1 = lines[i].split(";")[0]
+                pronun2 = lines[i].split(" ")[0]+' '+lines[i].split(";")[1]
+                del lines[i]
+                lines.insert(i,pronun2)
+                lines.insert(i,pronun1)
             final_output += format_output(lines[i].split(' ')[0],lines[i].split(' ')[1])
             if i != len(lines)-1:
                 final_output +='\n'
@@ -173,7 +179,7 @@ def get_all_macroclass_forms(filename = "output_file.txt"):
             'stopU':'ptk',
             'n':'mnNG',
             'l':'Rl',
-            'sv':'wj8',
+            'sv':'wj8h',
             'v':'aeiuoyE92O*@15'
             }
     
@@ -186,7 +192,7 @@ def get_all_macroclass_forms(filename = "output_file.txt"):
        lines = file.read().split("\n")
        for i in range(len(lines)):
            lines[i] = lines[i].split(" ")
-       sampa_forms = [line[4] for line in lines[:-1]]
+       sampa_forms = [line[4] for line in lines[:-2]]
        sampa_forms = [sampa_form.split("-") for sampa_form in sampa_forms]
        sampa_forms = [char for sampa_form in sampa_forms for char in sampa_form]
        
@@ -199,11 +205,9 @@ def get_all_macroclass_forms(filename = "output_file.txt"):
                    this_form += get_macro_class(char)
                macro_forms.append(this_form)
            except(TypeError):
-               #catching error when semicolon inside the sampa 
-               #(multiple pronunciation)
-               #print(char)
-               #print(form)
-               #breakpoint()
+               print(char)
+               print(form)
+               breakpoint()
                pass
 
        return macro_forms
@@ -213,7 +217,7 @@ def get_all_plain_syllables(filename = "output_file.txt"):
        lines = file.read().split("\n")
        for i in range(len(lines)):
            lines[i] = lines[i].split(" ")
-       syllables = [line[4] for line in lines[:-1]]
+       syllables = [line[4] for line in lines[:-2]]
        syllables = [syllable.split("-") for syllable in syllables]
        syllables = [el for syllable in syllables for el in syllable]
        return syllables
