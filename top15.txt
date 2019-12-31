@@ -1,32 +1,32 @@
 ﻿         0      1
-0       CV  10942
-1      CVC   3102
-2      CCV   2416
-3        V   1699
-4     CCVC    597
-5     CVCC    366
-6       VC    335
-7     CCCV    234
+0       CV  10959
+1      CVC   3108
+2      CCV   2418
+3        V   1671
+4     CCVC    587
+5     CVCC    381
+6       VC    305
+7     CCCV    235
 8    CCCVC     79
-9    CCVCC     31
-10   CCCCV     27
-11     VCC     17
-12  CCCCVC      9
-13   CVCCC      8
-14  CCCVCC      6
+9      VCC     75
+10   CCVCC     34
+11   CVCCC      8
+12  CCCVCC      6
+13  CCCCVC      4
+14   CCCCV      3
 
 ------------------
 
           0     1
-0    stopUv  2729
+0    stopUv  2752
 1        lv  2098
-2        nv  1771
-3         v  1699
-4       fUv  1565
-5    stopVv  1525
+2        nv  1768
+3         v  1671
+4       fUv  1564
+5    stopVv  1523
 6       fVv  1039
-7   stopUlv   803
-8   stopUvl   512
+7   stopUlv   827
+8   stopUvl   524
 9   stopVlv   425
 10    fUsvv   308
 11     fUvl   226
@@ -37,11 +37,11 @@
 ------------------
 
      0    1
-0    a  477
+0    a  470
 1   de  458
-2    e  354
-3   te  329
-4   ti  278
+2    e  334
+3   te  330
+4   ti  282
 5    @  272
 6   Ra  267
 7   Re  265

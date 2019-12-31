@@ -1,0 +1,58 @@
+﻿         0      1
+0       CV  10942
+1      CVC   3102
+2      CCV   2416
+3        V   1699
+4     CCVC    597
+5     CVCC    366
+6       VC    335
+7     CCCV    234
+8    CCCVC     79
+9    CCVCC     31
+10   CCCCV     27
+11     VCC     17
+12  CCCCVC      9
+13   CVCCC      8
+14  CCCVCC      6
+
+------------------
+
+          0     1
+0    stopUv  2729
+1        lv  2098
+2        nv  1771
+3         v  1699
+4       fUv  1565
+5    stopVv  1525
+6       fVv  1039
+7   stopUlv   803
+8   stopUvl   512
+9   stopVlv   425
+10    fUsvv   308
+11     fUvl   226
+12      svv   215
+13      nvl   202
+14  stopVvl   170
+
+------------------
+
+     0    1
+0    a  477
+1   de  458
+2    e  354
+3   te  329
+4   ti  278
+5    @  272
+6   Ra  267
+7   Re  265
+8   m@  254
+9   li  235
+10  k1  227
+11   5  224
+12  R*  223
+13  se  193
+14  si  192
+
+------------------
+
+

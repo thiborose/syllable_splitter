@@ -119,7 +119,7 @@ def rule3(string):
     with application of the rule 3
     """
     position = int()
-    if len(string) == 3:
+    if len(string) >= 3:
         if string[0] not in sampa_liquids and string[0] not in sampa_semi_vowels:
             if string[1] in sampa_liquids:
                 if string[2] in sampa_semi_vowels:
@@ -132,6 +132,11 @@ def rule3(string):
     if do_this_rule:
         # go back on this
         position = 1
+
+    # to handle "floating s"
+    if string[0] in sampa_stop_consonants and string[1] in sampa_fricatives and string[2] in sampa_stop_consonants:
+        position = 2
+
     return position
 
 
