@@ -25,10 +25,18 @@ sampa_nasal_vowels = {'@', '1', '5'}
 
 
 def is_phonetic_vowel(char):
+    """
+    Takes a character as a string, 
+    returns a Boolean (True if the character is a vowel, in the sampa alphabet)
+    """
     return char in sampa_oral_vowels or char in sampa_nasal_vowels
 
 
 def cv_orthographic(string):
+    """
+    Takes a string (orthographic writting), 
+    returns the orthographic CV form as a string
+    """
     output = ''
     for char in string:
         if char in consonants:
@@ -39,6 +47,10 @@ def cv_orthographic(string):
 
 
 def cv_phonetics(sampa):
+    """
+    Takes a string (sampa), 
+    returns the phonetic CV form as a string
+    """
     output = ''
     for char in sampa:
         if is_phonetic_vowel(char):
@@ -51,6 +63,10 @@ def cv_phonetics(sampa):
 
 
 def spot_vowels(sampa):
+    """
+    Takes a string (sampa), 
+    returns the positions of the vowel-sounds
+    """
     index_of_vowels = []
     for index in range(len(sampa)):
         if is_phonetic_vowel(sampa[index]):
@@ -59,6 +75,11 @@ def spot_vowels(sampa):
 
 
 def rules(string):
+    """
+    Takes a string, 
+    returns the position of the hyphen for sylabification
+    regardless the rule used
+    """
     length = len(string)
     if length == 0:
         return 0
@@ -71,6 +92,11 @@ def rules(string):
 
 
 def rule2(string):
+    """
+    Takes a string, 
+    return a the position of the hyphen for syllabification
+    with application of the rule 2
+    """
     position = int()
     if string[0] not in sampa_liquids and string[0] not in sampa_semi_vowels and (
             string[1] in sampa_liquids or string[1] in sampa_semi_vowels):
@@ -87,6 +113,11 @@ def rule2(string):
 
 
 def rule3(string):
+    """
+    Takes a string, 
+    return a the position of the hyphen for syllabification
+    with application of the rule 3
+    """
     position = int()
     if len(string) == 3:
         if string[0] not in sampa_liquids and string[0] not in sampa_semi_vowels:
@@ -105,6 +136,11 @@ def rule3(string):
 
 
 def syllabic_phonetics(sampa):
+    """
+    Takes a sampa phonetic string, 
+    returns a string:
+    the sampa splitted by syllables with hyphens
+    """
     index_of_vowels = spot_vowels(sampa)
 
     slices = []
@@ -132,6 +168,15 @@ def syllabic_phonetics(sampa):
 
 
 def format_output(spelling, phonetic):
+    """
+    Takes the orthographic and sampa form of a word, 
+    returns a string containing:
+        the orthographic form
+        the CV form
+        the sampa form
+        the syllabed sampa form
+        the syllabed CV form
+    """
     output = '{} {} {} {} {} {}'.format(
         spelling,
         cv_orthographic(spelling),
@@ -144,11 +189,18 @@ def format_output(spelling, phonetic):
 
 
 def main():
+    """
+    Main function, 
+    launches the program
+    """
     process_file()
     top15_all()
 
 
 def process_file():
+    """
+    Processes the input file, produces the output file
+    """
     # please make sure the file is in the same folder as the program
     final_output = ''
     with open('Input_File.txt', 'r', encoding='utf-8-sig') as input_file:
@@ -173,6 +225,10 @@ def process_file():
 
 
 def get_all_CV_forms(filename="output_file.txt"):
+    """
+    Takes the path of the output file, 
+    returns all the phonetic CV forms (each of them may appear multiple times)
+    """
     with open('output_file.txt', 'r', encoding="utf-8-sig") as file:
         lines = file.read().split("\n")
         for i in range(len(lines)):
@@ -184,6 +240,10 @@ def get_all_CV_forms(filename="output_file.txt"):
 
 
 def get_all_macroclass_forms(filename="output_file.txt"):
+    """
+    Takes the path of the output file, 
+    returns all the macroclass forms (each of them may appear multiple times)
+    """
 
     macro_classes = {
         'fV': 'vzZ',
@@ -227,6 +287,10 @@ def get_all_macroclass_forms(filename="output_file.txt"):
 
 
 def get_all_plain_syllables(filename="output_file.txt"):
+    """
+    Takes the path of the output file, 
+    returns all the phonetic syllables (each of them may appear multiple times)
+    """
     with open('output_file.txt', 'r', encoding="utf-8-sig") as file:
         lines = file.read().split("\n")
         for i in range(len(lines)):
@@ -238,11 +302,23 @@ def get_all_plain_syllables(filename="output_file.txt"):
 
 
 def most_frequent(l):
+    """
+    Takes a list, 
+    returns a list of 15 2-tuples.
+        the first element of the tuple is  an element of the list,
+        the second is its number of occurence
+    these 15 tuples are ordered decreasingly by number of apparition 
+    of the list's element
+        
+    """
     occurence_count = Counter(l)
     return occurence_count.most_common(15)
 
 
 def top15_all():
+    """
+    Creates a file containing the top 15 CV, macroclass, and phonetic forms. 
+    """
     with open('top15.txt', 'w', encoding="utf-8-sig") as file:
         output = ''
         for func in [get_all_CV_forms, get_all_macroclass_forms,
