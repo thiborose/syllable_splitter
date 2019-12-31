@@ -3,7 +3,7 @@
 
 """
 Phonetics project NLP M1:
-syllabification by Eduardo Calò and Thibo Rosemplatt
+Syllabification by Eduardo Calò and Thibo Rosemplatt
 """
 
 from collections import Counter
@@ -34,7 +34,7 @@ def is_phonetic_vowel(char):
 
 def cv_orthographic(string):
     """
-    Takes a string (orthographic writting), 
+    Takes a string (orthographic writing), 
     returns the orthographic CV form as a string
     """
     output = ''
@@ -65,7 +65,7 @@ def cv_phonetics(sampa):
 def spot_vowels(sampa):
     """
     Takes a string (sampa), 
-    returns the positions of the vowel-sounds
+    returns the positions of the vowel sounds
     """
     index_of_vowels = []
     for index in range(len(sampa)):
@@ -76,8 +76,8 @@ def spot_vowels(sampa):
 
 def rules(string):
     """
-    Takes a string, 
-    returns the position of the hyphen for sylabification
+    Takes a string (a phonetic sampa segment between 2 vowels), 
+    returns the position of the hyphen for syllabification
     regardless the rule used
     """
     length = len(string)
@@ -93,8 +93,8 @@ def rules(string):
 
 def rule2(string):
     """
-    Takes a string, 
-    return a the position of the hyphen for syllabification
+    Takes a string (a 2-character phonetic sampa segment between 2 vowels), 
+    return the position of the hyphen for syllabification,
     with application of the rule 2
     """
     position = int()
@@ -114,7 +114,7 @@ def rule2(string):
 
 def rule3(string):
     """
-    Takes a string, 
+    Takes a string (a 3-or-more-character phonetic sampa segment between 2 vowels), 
     return a the position of the hyphen for syllabification
     with application of the rule 3
     """
@@ -139,7 +139,7 @@ def syllabic_phonetics(sampa):
     """
     Takes a sampa phonetic string, 
     returns a string:
-    the sampa splitted by syllables with hyphens
+    the sampa phonetic transcription splitted by syllables with hyphens
     """
     index_of_vowels = spot_vowels(sampa)
 
@@ -169,13 +169,13 @@ def syllabic_phonetics(sampa):
 
 def format_output(spelling, phonetic):
     """
-    Takes the orthographic and sampa form of a word, 
+    Takes the orthographic and phonetic form of a word, 
     returns a string containing:
         the orthographic form
         the CV form
-        the sampa form
-        the syllabed sampa form
-        the syllabed CV form
+        the phonetic form
+        the syllabified phonetic form
+        the syllabified CV form
     """
     output = '{} {} {} {} {} {}'.format(
         spelling,
@@ -208,7 +208,7 @@ def process_file():
         lines = list(input_file)  # split by lines
         for i in range(len(lines)):
             lines[i] = lines[i].replace('\n', '')
-            # Handling the double pronunciations
+            # handling the double pronunciations
             if ";" in lines[i]:
                 pronun1 = lines[i].split(";")[0]
                 pronun2 = lines[i].split(" ")[0] + ' ' + lines[i].split(";")[1]
@@ -304,12 +304,11 @@ def get_all_plain_syllables(filename="output_file.txt"):
 def most_frequent(l):
     """
     Takes a list, 
-    returns a list of 15 2-tuples.
-        the first element of the tuple is  an element of the list,
+    returns a list of 15 2-tuples:
+        the first element of the tuple is an element of the list,
         the second is its number of occurence
     these 15 tuples are ordered decreasingly by number of apparition 
     of the list's element
-        
     """
     occurence_count = Counter(l)
     return occurence_count.most_common(15)
