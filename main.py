@@ -211,7 +211,8 @@ def process_file():
     with open('Input_File.txt', 'r', encoding='utf-8-sig') as input_file:
         print('input file read')
         lines = list(input_file)  # split by lines
-        for i in range(len(lines)):
+        i = 0
+        while i < len(lines):
             lines[i] = lines[i].replace('\n', '')
             # handling the double pronunciations
             if ";" in lines[i]:
@@ -220,10 +221,10 @@ def process_file():
                 del lines[i]
                 lines.insert(i, pronun2)
                 lines.insert(i, pronun1)
-            final_output += format_output(lines[i].split(' ')
-                                          [0], lines[i].split(' ')[1])
+            final_output += format_output(lines[i].split(' ')[0], lines[i].split(' ')[1])
             if i != len(lines) - 1:
                 final_output += '\n'
+            i += 1
     with open('output_file.txt', 'w+') as output_file:
         print(final_output, file=output_file)
         print('output file written')
