@@ -1,4 +1,4 @@
-# syllable_splitter
+# Syllable splitter
 ## Aim 
 This python script is aimed at splitting French words in syllables separated by hyphens. 
 It is coded in python.
