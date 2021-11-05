@@ -4,6 +4,10 @@ class SyllabificationRules():
     def __init__(self):
         pass
 
+    def get_sampa(self, word:str)->str:
+        #TODO: write the function that turns text into phonetics
+        pass
+
     def syllabic_phonetics(self, sampa:str):
         """
         sampa: sampa phonetic representation 
@@ -22,7 +26,7 @@ class SyllabificationRules():
             slices.append(current_slice)
         # get the position of the hyphens for each slice
         for sl in slices:
-            index_of_hyphens_in_slices.append(self.rules(sl))
+            index_of_hyphens_in_slices.append(self.find_rule(sl))
         # get the positions of the hyphens for the whole word
         for i in range(len(index_of_hyphens_in_slices)):
             total_index = index_of_hyphens_in_slices[i] + index_of_vowels[i] + 1
@@ -32,14 +36,16 @@ class SyllabificationRules():
 
         for index in reversed(index_of_hyphens_total):
             sampa.insert(index, '-')
-        return ''.join(sampa)
+        
+        split_sampa = ''.join(sampa).split("-")
+        return tuple(split_sampa)
 
     def is_phonetic_vowel(self, char):
         """
         Takes a character as a string, 
         returns a Boolean (True if the character is a vowel, in the sampa alphabet)
         """
-        return char in sampa_oral_vowels or char in sampa_nasal_vowels
+        return char in SAMPA_ORAL_VOWELS or char in SAMPA_NASAL_VOWELS
 
     def spot_vowels(self, sampa):
         """
@@ -52,7 +58,7 @@ class SyllabificationRules():
                 index_of_vowels.append(index)
         return index_of_vowels
 
-    def rules(self, string):
+    def find_rule(self, string):
         """
         Takes a string (a phonetic sampa segment between 2 vowels), 
         returns the position of the hyphen for syllabification
@@ -64,33 +70,33 @@ class SyllabificationRules():
         if length == 1:
             return 0
         if length == 2:
-            return self.rule2(string)
+            return self.rule_2(string)
         if length >= 3:
-            return self.rule3(string)
+            return self.rule_3(string)
 
 
-    def rule2(self, string):
+    def rule_2(self, string):
         """
         Takes a string (a 2-character phonetic sampa segment between 2 vowels), 
         return the position of the hyphen for syllabification,
         with application of the rule 2
         """
         position = int()
-        if string[0] not in sampa_liquids and string[0] not in sampa_semi_vowels and (
-                string[1] in sampa_liquids or string[1] in sampa_semi_vowels):
+        if string[0] not in SAMPA_LIQUIDS and string[0] not in SAMPA_SEMI_VOWELS and (
+                string[1] in SAMPA_LIQUIDS or string[1] in SAMPA_SEMI_VOWELS):
             position = 0
-        elif string[0] in sampa_liquids and string[1] in sampa_liquids:
+        elif string[0] in SAMPA_LIQUIDS and string[1] in SAMPA_LIQUIDS:
             position = 1
-        elif string[0] in sampa_liquids and string[1] not in sampa_liquids and string[1] not in sampa_semi_vowels:
+        elif string[0] in SAMPA_LIQUIDS and string[1] not in SAMPA_LIQUIDS and string[1] not in SAMPA_SEMI_VOWELS:
             position = 1
-        elif string[0] in sampa_semi_vowels and not self.is_phonetic_vowel(string[1]):
+        elif string[0] in SAMPA_LIQUIDS and not self.is_phonetic_vowel(string[1]):
             position = 1
-        elif string[0] not in sampa_liquids and string[0] not in sampa_semi_vowels and string[1] not in sampa_liquids and string[1] not in sampa_semi_vowels:
+        elif string[0] not in SAMPA_LIQUIDS and string[0] not in SAMPA_SEMI_VOWELS and string[1] not in SAMPA_SEMI_VOWELS and string[1] not in SAMPA_SEMI_VOWELS:
             position = 1
         return position
 
 
-    def rule3(self, string):
+    def rule_3(self, string):
         """
         Takes a string (a 3-or-more-character phonetic sampa segment between 2 vowels), 
         return a the position of the hyphen for syllabification
@@ -98,37 +104,39 @@ class SyllabificationRules():
         """
         position = int()
         if len(string) >= 3:
-            if string[0] not in sampa_liquids and string[0] not in sampa_semi_vowels:
-                if string[1] in sampa_liquids:
-                    if string[2] in sampa_semi_vowels:
+            if string[0] not in SAMPA_LIQUIDS and string[0] not in SAMPA_SEMI_VOWELS:
+                if string[1] in SAMPA_LIQUIDS:
+                    if string[2] in SAMPA_SEMI_VOWELS:
                         position = 0
 
         do_this_rule = True
         for char in string:
-            if char in sampa_liquids or char in sampa_semi_vowels:
+            if char in SAMPA_LIQUIDS or char in SAMPA_SEMI_VOWELS:
                 do_this_rule = False
         if do_this_rule:
             # go back on this
             position = 1
 
         # to handle "floating s"
-        if string[0] in sampa_stop_consonants and string[1] in sampa_fricatives and string[2] in sampa_stop_consonants:
+        if string[0] in SAMPA_STOP_CONSONANTS and string[1] in SAMPA_FRICATIVES and string[2] in SAMPA_STOP_CONSONANTS:
             position = 2
 
         return position
 
 
-    def cv_phonetics(self, sampa):
+    def sampa_split_to_cv_split(self, sampa:tuple):
         """
-        Takes a string (sampa), 
+        Takes a tuple (sampa split), 
         returns the phonetic CV form as a string
         """
-        output = ''
-        for char in sampa:
+        return tuple([self.translate_sampa2cv(x) for x in sampa])
+
+    def translate_sampa2cv(self, sampa_str:str)->str:
+
+        cv = ''
+        for char in sampa_str:
             if self.is_phonetic_vowel(char):
-                output += 'V'
-            elif char == '-':
-                output += char
+                cv += 'V'
             else:
-                output += 'C'
-        return output
+                cv += 'C'
+        return cv
