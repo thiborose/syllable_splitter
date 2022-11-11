@@ -7,31 +7,31 @@ class SyllabificationRules():
         self.epi = epitran.Epitran("fra-Latn")
 
     def get_sampa(self, word:str)->str:
-        transliteration = self.epi.xsampa_list(self.word)
+        transliteration = self.epi.xsampa_list(word)
         transliteration = ''.join(transliteration)
+        return transliteration
 
     def syllabic_phonetics(self, sampa:str):
         """
         sampa: sampa phonetic representation 
             -> list: sampa phonetic transcription splitted by syllables
         """
-        index_of_vowels = self.spot_vowels(sampa)
-
+        vowels_index = self.get_vowel_index(sampa)
+        
         slices = []
-
-        index_of_hyphens_in_slices = []
-        index_of_hyphens_total = []
-
-        for number in range(1, len(index_of_vowels)):
-            current_slice = sampa[index_of_vowels[number -
-                                                1] + 1:index_of_vowels[number]]
+        for number in range(1, len(vowels_index)):
+            current_slice = sampa[vowels_index[number-1] + 1:vowels_index[number]]
             slices.append(current_slice)
+
         # get the position of the hyphens for each slice
+        index_of_hyphens_in_slices = []
         for sl in slices:
             index_of_hyphens_in_slices.append(self.find_rule(sl))
+
         # get the positions of the hyphens for the whole word
+        index_of_hyphens_total = []
         for i in range(len(index_of_hyphens_in_slices)):
-            total_index = index_of_hyphens_in_slices[i] + index_of_vowels[i] + 1
+            total_index = index_of_hyphens_in_slices[i] + vowels_index[i] + 1
             index_of_hyphens_total.append(total_index)
 
         sampa = list(sampa)
@@ -49,16 +49,9 @@ class SyllabificationRules():
         """
         return char in SAMPA_ORAL_VOWELS or char in SAMPA_NASAL_VOWELS
 
-    def spot_vowels(self, sampa):
-        """
-        Takes a string (sampa), 
-        returns the positions of the vowel sounds
-        """
-        index_of_vowels = []
-        for index in range(len(sampa)):
-            if self.is_phonetic_vowel(sampa[index]):
-                index_of_vowels.append(index)
-        return index_of_vowels
+    def get_vowel_index(self, sampa:str)->list:
+        is_vowel = [self.is_phonetic_vowel(x) for x in sampa]
+        return [i for i, x in enumerate(is_vowel) if x]
 
     def find_rule(self, string):
         """
@@ -67,13 +60,11 @@ class SyllabificationRules():
         regardless the rule used
         """
         length = len(string)
-        if length == 0:
-            return 0
-        if length == 1:
+        if length < 2:
             return 0
         if length == 2:
             return self.rule_2(string)
-        if length >= 3:
+        if length > 2:
             return self.rule_3(string)
 
 
