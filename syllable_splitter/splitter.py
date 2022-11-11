@@ -1,12 +1,14 @@
 from .constants import *
+import epitran
+
 
 class SyllabificationRules():
     def __init__(self):
-        pass
+        self.epi = epitran.Epitran("fra-Latn")
 
     def get_sampa(self, word:str)->str:
-        #TODO: write the function that turns text into phonetics
-        pass
+        transliteration = self.epi.xsampa_list(self.word)
+        transliteration = ''.join(transliteration)
 
     def syllabic_phonetics(self, sampa:str):
         """

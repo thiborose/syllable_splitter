@@ -14,6 +14,6 @@ setup(
     author='Thibo Rosemplatt',
     author_email='thibo.rosemplatt@gmail.com',
     url = 'https://github.com/psawa/syllable_splitter',
-    packages=find_packages('src'),
+    packages=find_packages('syllable_splitter'),
     install_requires=[],
 )

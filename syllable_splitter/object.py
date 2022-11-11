@@ -14,18 +14,14 @@ class Object():
     def __init__(self, word:str) -> None:
         assert isinstance(word, str) , "word must be a str"
         self.word = word
-        self.phonemes = self._get_phonemes()
-        self.cv = self._get_cv()
-        self.syllables = self._get_syllables()
+        self.sampa = splitter.get_sampa(self.word)
+        self.cv = ""
+        self.syllables_sampa = splitter.get_syllables_sampa()
+        self.syllables_word = splitter.get_syllables_word()
+
+
+    @property
     
-    def _get_phonemes(self)->list:
-        pass
-
-    def _get_cv(self)->list:
-        pass
-
-    def _get_syllables(self)->list: 
-        pass
 
     def __str__(self):
         return self.word
