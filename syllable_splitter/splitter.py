@@ -8,7 +8,7 @@ class SyllabificationRules():
 
     def get_sampa(self, word:str)->str:
         transliteration = self.epi.xsampa_list(word)
-        transliteration = ''.join(transliteration)
+        # transliteration = ''.join(transliteration)
         return transliteration
 
     def syllabic_phonetics(self, sampa:str):
@@ -16,6 +16,7 @@ class SyllabificationRules():
         sampa: sampa phonetic representation 
             -> list: sampa phonetic transcription splitted by syllables
         """
+        # breakpoint()
         vowels_index = self.get_vowel_index(sampa)
         
         slices = []
@@ -25,8 +26,8 @@ class SyllabificationRules():
 
         # get the position of the hyphens for each slice
         index_of_hyphens_in_slices = []
-        for sl in slices:
-            index_of_hyphens_in_slices.append(self.find_rule(sl))
+        for slice in slices:
+            index_of_hyphens_in_slices.append(self.find_rule(slice))
 
         # get the positions of the hyphens for the whole word
         index_of_hyphens_total = []
@@ -47,6 +48,7 @@ class SyllabificationRules():
         Takes a character as a string, 
         returns a Boolean (True if the character is a vowel, in the sampa alphabet)
         """
+        # breakpoint()
         return char in SAMPA_ORAL_VOWELS or char in SAMPA_NASAL_VOWELS
 
     def get_vowel_index(self, sampa:str)->list:
